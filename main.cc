@@ -81,13 +81,13 @@ int evaluateExpression(const std::string expr)
     {
         if (exprValues[i] == "(")
         {
-            std::cout << "opepa\t" << exprValues[i] << std::endl;
+            std::cout << "\t\t\topepa\t" << exprValues[i] << std::endl;
             continue;
         }
 
         else if ((isOperator(exprValues[i]) || isNumber(exprValues[i])) && (i != (len - 1)))
         {
-            std::cout << "isO|N\t" << exprValues[i] << std::endl;
+            // std::cout << "isO|N\t" << exprValues[i] << std::endl;
 
             stack[stackIndex] = exprValues[i];
             stackIndex++;
@@ -97,7 +97,7 @@ int evaluateExpression(const std::string expr)
 
         else
         {
-            std::cout << "clopa\t" << exprValues[i] << std::endl;
+            // std::cout << "clopa\t" << exprValues[i] << std::endl;
 
             if (i == (len - 1)) // handle the the last value.
             {
@@ -105,42 +105,62 @@ int evaluateExpression(const std::string expr)
                 stackIndex++;
             }
 
-            std::cout << "stack[0] is " << stack[0] << std::endl;
-
-            int num1 = std::stoi(stack[0]);
-            std::string oprtr = stack[1];
-            int num2 = std::stoi(stack[2]);
-            std::cout << "processing expression " << num1 << oprtr << num2 << std::endl;
+            std::cout << "\t\t\tstack[0] is " << stack[0] << std::endl;
 
             int tempAns = 0;
-            if (oprtr == "+")
+            while (stack[1] != "" && stack[2] != "")
             {
-                tempAns = num1 + num2;
-            }
-            if (oprtr == "-")
-            {
-                tempAns = num1 - num2;
-            }
-            if (oprtr == "*")
-            {
-                tempAns = num1 * num2;
-            }
-            if (oprtr == "/" && num2 != 0)
-            {
-                tempAns = num1 / num2;
+                int num1 = std::stoi(stack[0]);
+                std::string oprtr = stack[1];
+                int num2 = std::stoi(stack[2]);
+                std::cout << "\t\t\t\tprocessing expression " << num1 << oprtr << num2 << std::endl;
+
+                if (oprtr == "+")
+                {
+                    tempAns = num1 + num2;
+                }
+                if (oprtr == "-")
+                {
+                    tempAns = num1 - num2;
+                }
+                if (oprtr == "*")
+                {
+                    tempAns = num1 * num2;
+                }
+                if (oprtr == "/" && num2 != 0)
+                {
+                    tempAns = num1 / num2;
+                }
+
+                // empty values since they've already been used.
+                stack[1] = "";
+                stack[2] = "";
+
+                // After processing, shift values by 2 positions in stack.
+                int stackShiftIndex = 0;
+                while (stackShiftIndex < (len - 3))
+                {
+                    std::cout << std::endl
+                              << "\t\t\t\t\tstackShiftIndex == " << stackShiftIndex << std::endl;
+                    std::cout << "\t\t\t\t\treplacing " << stack[stackShiftIndex + 1] << " with " << stack[stackShiftIndex + 3] << std::endl;
+
+                    stack[stackShiftIndex + 1] = stack[stackShiftIndex + 3];
+                    stack[stackShiftIndex + 3] = ""; // clearing values to prevent infinite loop
+                    stackShiftIndex++;
+                }
+
+                std::cout << "\t\t\t\tchanging " << stack[0] << " to " << tempAns << std::endl;
+
+                stack[0] = std::to_string(tempAns);
+                stackIndex = 1;
             }
 
-            for (int j = 1; j < len + 1; j++) // after processing, clear stack.
+            std::cout << "\t\t\tstack is now: " << std::endl;
+            for (int k = 0; k < len; k++)
             {
-                std::cout << "stack[j] is\t" << stack[j] << "\tj is " << j << std::endl;
-                stack[j] = "";
+                std::cout << "\t\t\t\tk == " << k << "\t" << "stack[k] == " << stack[k] << std::endl;
             }
-
-            std::cout << "changing " << stack[0] << " to " << tempAns << std::endl;
-
-            stack[0] = std::to_string(tempAns);
-            std::cout << "stack[0] is now " << stack[0] << std::endl;
-            stackIndex = 1;
+            std::cout << std::endl;
 
             continue;
         }
