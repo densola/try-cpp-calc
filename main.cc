@@ -141,18 +141,77 @@ int evaluateExpression(const std::string expr)
 
 ////////////////////////////////////////////////////////////////////////////////
 // gui.cc
+#include <gtkmm.h>
+
+class Calculator : public Gtk::Window
+{
+
+public:
+    Calculator();
+    ~Calculator() override;
+
+protected:
+    void on_btn0_click(); // signaling test method
+
+    Gtk::Grid grid;
+    Gtk::Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9;
+};
+
+Calculator::Calculator()
+    : btn0("0"),
+      btn1("1"),
+      btn2("2"),
+      btn3("3"),
+      btn4("4"),
+      btn5("5"),
+      btn6("6"),
+      btn7("7"),
+      btn8("8"),
+      btn9("9")
+{
+    set_title("Calculator");
+    set_child(grid);
+
+    // Call handler on click
+    btn0.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btn0_click));
+
+    // Add and position buttons
+    grid.attach(btn1, 0, 0);
+    grid.attach(btn2, 1, 0);
+    grid.attach(btn3, 2, 0);
+    grid.attach(btn4, 0, 1);
+    grid.attach(btn5, 1, 1);
+    grid.attach(btn6, 2, 1);
+    grid.attach(btn7, 0, 2);
+    grid.attach(btn8, 1, 2);
+    grid.attach(btn9, 2, 2);
+    grid.attach_next_to(btn0, btn8, Gtk::PositionType::BOTTOM, 1, 3);
+}
+
+Calculator::~Calculator()
+{
+}
+
+void Calculator::on_btn0_click()
+{
+    std::cout << "0 was clicked." << std::endl;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // main.cc
 
-int main()
+int main(int argc, char *argv[])
 {
-    std::string toEvaluate;
+    // std::string toEvaluate;
 
-    std::cout << "Enter a mathematical expression to evaluate: ";
-    getline(std::cin, toEvaluate);
-    std::cout << std::endl;
+    // std::cout << "Enter a mathematical expression to evaluate: ";
+    // getline(std::cin, toEvaluate);
+    // std::cout << std::endl;
 
-    int answer = evaluateExpression(toEvaluate);
-    std::cout << "The answer is " << answer << std::endl;
+    // int answer = evaluateExpression(toEvaluate);
+    // std::cout << "The answer is " << answer << std::endl;
+
+    auto app = Gtk::Application::create();
+
+    return app->make_window_and_run<Calculator>(argc, argv);
 }
