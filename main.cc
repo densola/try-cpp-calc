@@ -154,7 +154,7 @@ protected:
     void on_btn0_click(); // signaling test method
 
     Gtk::Grid grid;
-    Gtk::Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9;
+    Gtk::Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnPlus, btnMinus, btnTimes, btnDivision, btnEquals;
 };
 
 Calculator::Calculator()
@@ -167,7 +167,12 @@ Calculator::Calculator()
       btn6("6"),
       btn7("7"),
       btn8("8"),
-      btn9("9")
+      btn9("9"),
+      btnPlus("+"),
+      btnMinus("-"),
+      btnTimes("*"),
+      btnDivision("/"),
+      btnEquals("=")
 {
     set_title("Calculator");
     set_child(grid);
@@ -185,7 +190,13 @@ Calculator::Calculator()
     grid.attach(btn7, 0, 2);
     grid.attach(btn8, 1, 2);
     grid.attach(btn9, 2, 2);
-    grid.attach_next_to(btn0, btn8, Gtk::PositionType::BOTTOM, 1, 3);
+    grid.attach_next_to(btn0, btn8, Gtk::PositionType::BOTTOM);
+
+    grid.attach(btnPlus, 3, 0);
+    grid.attach(btnMinus, 3, 1);
+    grid.attach(btnTimes, 3, 2);
+    grid.attach(btnDivision, 3, 3);
+    grid.attach_next_to(btnEquals, btn9, Gtk::PositionType::BOTTOM);
 }
 
 Calculator::~Calculator()
