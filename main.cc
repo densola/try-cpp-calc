@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 
+std::string global_expression = "";
+
 ////////////////////////////////////////////////////////////////////////////////
 // utils.cc
 
@@ -151,10 +153,26 @@ public:
     ~Calculator() override;
 
 protected:
-    void on_btn0_click(); // signaling test method
+    void on_btn0_click();
+    void on_btn1_click();
+    void on_btn2_click();
+    void on_btn3_click();
+    void on_btn4_click();
+    void on_btn5_click();
+    void on_btn6_click();
+    void on_btn7_click();
+    void on_btn8_click();
+    void on_btn9_click();
+    void on_btnPlus_click();
+    void on_btnMinus_click();
+    void on_btnTimes_click();
+    void on_btnDivision_click();
+    void on_btnEquals_click();
+    void on_btnClear_click();
 
+    Gtk::Frame frame;
     Gtk::Grid grid;
-    Gtk::Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnPlus, btnMinus, btnTimes, btnDivision, btnEquals;
+    Gtk::Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnPlus, btnMinus, btnTimes, btnDivision, btnEquals, btnClear;
 };
 
 Calculator::Calculator()
@@ -172,15 +190,14 @@ Calculator::Calculator()
       btnMinus("-"),
       btnTimes("*"),
       btnDivision("/"),
-      btnEquals("=")
+      btnEquals("="),
+      btnClear("CLR")
 {
+    set_child(frame);
+    frame.set_child(grid);
+
+    // Append visible components
     set_title("Calculator");
-    set_child(grid);
-
-    // Call handler on click
-    btn0.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btn0_click));
-
-    // Add and position buttons
     grid.attach(btn1, 0, 0);
     grid.attach(btn2, 1, 0);
     grid.attach(btn3, 2, 0);
@@ -196,7 +213,27 @@ Calculator::Calculator()
     grid.attach(btnMinus, 3, 1);
     grid.attach(btnTimes, 3, 2);
     grid.attach(btnDivision, 3, 3);
+    grid.attach_next_to(btnClear, btn7, Gtk::PositionType::BOTTOM);
     grid.attach_next_to(btnEquals, btn9, Gtk::PositionType::BOTTOM);
+
+    // Attach click signals to buttons
+    btn0.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btn0_click));
+    btn1.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btn1_click));
+    btn2.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btn2_click));
+    btn3.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btn3_click));
+    btn4.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btn4_click));
+    btn5.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btn5_click));
+    btn6.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btn6_click));
+    btn7.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btn7_click));
+    btn8.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btn8_click));
+    btn9.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btn9_click));
+
+    btnPlus.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btnPlus_click));
+    btnMinus.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btnMinus_click));
+    btnTimes.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btnTimes_click));
+    btnDivision.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btnDivision_click));
+    btnClear.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btnClear_click));
+    btnEquals.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btnEquals_click));
 }
 
 Calculator::~Calculator()
@@ -205,7 +242,67 @@ Calculator::~Calculator()
 
 void Calculator::on_btn0_click()
 {
-    std::cout << "0 was clicked." << std::endl;
+    global_expression += "0";
+}
+void Calculator::on_btn1_click()
+{
+    global_expression += "1";
+}
+void Calculator::on_btn2_click()
+{
+    global_expression += "2";
+}
+void Calculator::on_btn3_click()
+{
+    global_expression += "3";
+}
+void Calculator::on_btn4_click()
+{
+    global_expression += "4";
+}
+void Calculator::on_btn5_click()
+{
+    global_expression += "5";
+}
+void Calculator::on_btn6_click()
+{
+    global_expression += "6";
+}
+void Calculator::on_btn7_click()
+{
+    global_expression += "7";
+}
+void Calculator::on_btn8_click()
+{
+    global_expression += "8";
+}
+void Calculator::on_btn9_click()
+{
+    global_expression += "9";
+}
+void Calculator::on_btnPlus_click()
+{
+    global_expression += "+";
+}
+void Calculator::on_btnMinus_click()
+{
+    global_expression += "-";
+}
+void Calculator::on_btnTimes_click()
+{
+    global_expression += "*";
+}
+void Calculator::on_btnDivision_click()
+{
+    global_expression += "/";
+}
+void Calculator::on_btnClear_click()
+{
+    global_expression = "";
+}
+void Calculator::on_btnEquals_click()
+{
+    std::cout << global_expression << std::endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
