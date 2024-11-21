@@ -172,6 +172,8 @@ protected:
 
     Gtk::Frame frame;
     Gtk::Grid grid;
+    Gtk::TextView textView;
+    Glib::RefPtr<Gtk::TextBuffer> textBuffer;
     Gtk::Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnPlus, btnMinus, btnTimes, btnDivision, btnEquals, btnClear;
 };
 
@@ -196,7 +198,7 @@ Calculator::Calculator()
     set_child(frame);
     frame.set_child(grid);
 
-    // Append visible components
+    // Append visible components,
     set_title("Calculator");
     grid.attach(btn1, 0, 0);
     grid.attach(btn2, 1, 0);
@@ -207,14 +209,21 @@ Calculator::Calculator()
     grid.attach(btn7, 0, 2);
     grid.attach(btn8, 1, 2);
     grid.attach(btn9, 2, 2);
-    grid.attach_next_to(btn0, btn8, Gtk::PositionType::BOTTOM);
+    grid.attach(btn0, 1, 3);
 
-    grid.attach(btnPlus, 3, 0);
-    grid.attach(btnMinus, 3, 1);
-    grid.attach(btnTimes, 3, 2);
-    grid.attach(btnDivision, 3, 3);
-    grid.attach_next_to(btnClear, btn7, Gtk::PositionType::BOTTOM);
-    grid.attach_next_to(btnEquals, btn9, Gtk::PositionType::BOTTOM);
+    grid.attach(btnPlus, 3, 1);
+    grid.attach(btnMinus, 3, 2);
+    grid.attach(btnTimes, 3, 3);
+    grid.attach(btnDivision, 2, 3);
+    grid.attach(btnClear, 3, 0);
+    grid.attach(btnEquals, 0, 3);
+
+    textBuffer = Gtk::TextBuffer::create();
+    textView.set_buffer(textBuffer);
+    textView.set_margin(10);
+    textView.set_size_request(20, 20);
+    textView.set_valign(Gtk::Align::CENTER);
+    grid.attach_next_to(textView, btn1, Gtk::PositionType::TOP, 4);
 
     // Attach click signals to buttons
     btn0.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btn0_click));
@@ -243,66 +252,82 @@ Calculator::~Calculator()
 void Calculator::on_btn0_click()
 {
     global_expression += "0";
+    textBuffer->set_text(global_expression);
 }
 void Calculator::on_btn1_click()
 {
     global_expression += "1";
+    textBuffer->set_text(global_expression);
 }
 void Calculator::on_btn2_click()
 {
     global_expression += "2";
+    textBuffer->set_text(global_expression);
 }
 void Calculator::on_btn3_click()
 {
     global_expression += "3";
+    textBuffer->set_text(global_expression);
 }
 void Calculator::on_btn4_click()
 {
     global_expression += "4";
+    textBuffer->set_text(global_expression);
 }
 void Calculator::on_btn5_click()
 {
     global_expression += "5";
+    textBuffer->set_text(global_expression);
 }
 void Calculator::on_btn6_click()
 {
     global_expression += "6";
+    textBuffer->set_text(global_expression);
 }
 void Calculator::on_btn7_click()
 {
     global_expression += "7";
+    textBuffer->set_text(global_expression);
 }
 void Calculator::on_btn8_click()
 {
     global_expression += "8";
+    textBuffer->set_text(global_expression);
 }
 void Calculator::on_btn9_click()
 {
     global_expression += "9";
+    textBuffer->set_text(global_expression);
 }
 void Calculator::on_btnPlus_click()
 {
-    global_expression += "+";
+    global_expression += " + ";
+    textBuffer->set_text(global_expression);
 }
 void Calculator::on_btnMinus_click()
 {
-    global_expression += "-";
+    global_expression += " - ";
+    textBuffer->set_text(global_expression);
 }
 void Calculator::on_btnTimes_click()
 {
-    global_expression += "*";
+    global_expression += " * ";
+    textBuffer->set_text(global_expression);
 }
 void Calculator::on_btnDivision_click()
 {
-    global_expression += "/";
+    global_expression += " / ";
+    textBuffer->set_text(global_expression);
 }
 void Calculator::on_btnClear_click()
 {
     global_expression = "";
+    textBuffer->set_text(global_expression);
 }
 void Calculator::on_btnEquals_click()
 {
-    std::cout << global_expression << std::endl;
+    global_expression = std::to_string(evaluateExpression(global_expression));
+    textBuffer->set_text(global_expression);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
