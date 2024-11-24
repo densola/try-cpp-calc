@@ -13,7 +13,16 @@ bool isOperator(std::string s)
 
 bool isNumber(std::string s)
 {
-    return std::stoi(s) * 0 == 0;
+    bool isNum = true;
+    for (int i = 0; i < s.size(); i++)
+    {
+        if ((s[i] != '-') && (s[i] != '0') && (s[i] != '1') && (s[i] != '2') && (s[i] != '3') && (s[i] != '4') && (s[i] != '5') && (s[i] != '6') && (s[i] != '7') && (s[i] != '8') && (s[i] != '9'))
+        {
+            isNum = false;
+        }
+    }
+
+    return isNum;
 }
 
 /**
@@ -48,7 +57,7 @@ int splitstringToArray(const std::string s, const char dl, const int l, std::str
  * answer to the space delimited mathematical expression
  * from expr.
  */
-int evaluateExpression(const std::string expr)
+std::string evaluateExpression(const std::string expr)
 {
     // Determine length for array.
     int len = 1;
@@ -137,8 +146,10 @@ int evaluateExpression(const std::string expr)
         }
     }
 
-    int ret = std::stoi(stack[0]);
-    return ret;
+    if (isNumber(stack[0]))
+        return stack[0];
+
+    return "ERROR";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -346,7 +357,7 @@ void Calculator::on_btnClear_click()
 }
 void Calculator::on_btnEquals_click()
 {
-    global_expression = std::to_string(evaluateExpression(global_expression));
+    global_expression = evaluateExpression(global_expression);
     textBuffer->set_text(global_expression);
 }
 
