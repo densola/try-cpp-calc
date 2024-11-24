@@ -169,12 +169,14 @@ protected:
     void on_btnDivision_click();
     void on_btnEquals_click();
     void on_btnClear_click();
+    void on_btnOpnParnth_click();
+    void on_btnClsParnth_click();
 
     Gtk::Frame frame;
     Gtk::Grid grid;
     Gtk::TextView textView;
     Glib::RefPtr<Gtk::TextBuffer> textBuffer;
-    Gtk::Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnPlus, btnMinus, btnTimes, btnDivision, btnEquals, btnClear;
+    Gtk::Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnPlus, btnMinus, btnTimes, btnDivision, btnEquals, btnClear, btnOpnParnth, btnClsParnth;
 };
 
 Calculator::Calculator()
@@ -193,7 +195,9 @@ Calculator::Calculator()
       btnTimes("*"),
       btnDivision("/"),
       btnEquals("="),
-      btnClear("CLR")
+      btnClear("CLR"),
+      btnOpnParnth("("),
+      btnClsParnth(")")
 {
     set_child(frame);
     frame.set_child(grid);
@@ -211,12 +215,15 @@ Calculator::Calculator()
     grid.attach(btn9, 2, 2);
     grid.attach(btn0, 1, 3);
 
-    grid.attach(btnPlus, 3, 1);
-    grid.attach(btnMinus, 3, 2);
-    grid.attach(btnTimes, 3, 3);
-    grid.attach(btnDivision, 2, 3);
-    grid.attach(btnClear, 3, 0);
-    grid.attach(btnEquals, 0, 3);
+    grid.attach(btnPlus, 3, 0);
+    grid.attach(btnMinus, 3, 1);
+    grid.attach(btnTimes, 3, 2);
+    grid.attach(btnDivision, 3, 3);
+
+    grid.attach(btnClear, 4, 0);
+    grid.attach(btnOpnParnth, 4, 1);
+    grid.attach(btnClsParnth, 4, 2);
+    grid.attach(btnEquals, 4, 3);
 
     textBuffer = Gtk::TextBuffer::create();
     textView.set_buffer(textBuffer);
@@ -241,7 +248,10 @@ Calculator::Calculator()
     btnMinus.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btnMinus_click));
     btnTimes.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btnTimes_click));
     btnDivision.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btnDivision_click));
+
     btnClear.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btnClear_click));
+    btnOpnParnth.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btnOpnParnth_click));
+    btnClsParnth.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btnClsParnth_click));
     btnEquals.signal_clicked().connect(sigc::mem_fun(*this, &Calculator::on_btnEquals_click));
 }
 
@@ -317,6 +327,16 @@ void Calculator::on_btnTimes_click()
 void Calculator::on_btnDivision_click()
 {
     global_expression += " / ";
+    textBuffer->set_text(global_expression);
+}
+void Calculator::on_btnOpnParnth_click()
+{
+    global_expression += "( ";
+    textBuffer->set_text(global_expression);
+}
+void Calculator::on_btnClsParnth_click()
+{
+    global_expression += " )";
     textBuffer->set_text(global_expression);
 }
 void Calculator::on_btnClear_click()
