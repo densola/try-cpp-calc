@@ -13,13 +13,17 @@ bool isOperator(std::string s)
 
 bool isNumber(std::string s)
 {
+    if (s == "")
+        return false;
+
     bool isNum = true;
     for (int i = 0; i < s.size(); i++)
     {
-        if ((s[i] != '-') && (s[i] != '0') && (s[i] != '1') && (s[i] != '2') && (s[i] != '3') && (s[i] != '4') && (s[i] != '5') && (s[i] != '6') && (s[i] != '7') && (s[i] != '8') && (s[i] != '9'))
-        {
+        if ((i == 0) && (s[i] == '-') && (s.size() > 1))
+            continue;
+
+        if ((s[i] != '0') && (s[i] != '1') && (s[i] != '2') && (s[i] != '3') && (s[i] != '4') && (s[i] != '5') && (s[i] != '6') && (s[i] != '7') && (s[i] != '8') && (s[i] != '9'))
             isNum = false;
-        }
     }
 
     return isNum;
@@ -79,11 +83,8 @@ std::string evaluateExpression(const std::string expr)
     int stackIndex = 0;
     for (int i = 0; i < len; i++) // TODO - Please improve this process lol
     {
-        if (exprValues[i] == "(")
-        {
-            std::cout << "\t\t\topepa\t" << exprValues[i] << std::endl;
+        if (exprValues[i] == "(" && (i < len - 1))
             continue;
-        }
 
         else if ((exprValues[i] != ")") && (isOperator(exprValues[i]) || isNumber(exprValues[i])) && (i != (len - 1)))
         {
@@ -104,26 +105,23 @@ std::string evaluateExpression(const std::string expr)
             int tempAns = 0;
             while (stack[1] != "" && stack[2] != "")
             {
+                if (!isNumber(stack[0]) || !isNumber(stack[2]) || (len < 3))
+                    return "ERROR";
+
                 int num1 = std::stoi(stack[0]);
                 std::string oprtr = stack[1];
                 int num2 = std::stoi(stack[2]);
 
                 if (oprtr == "+")
-                {
                     tempAns = num1 + num2;
-                }
-                if (oprtr == "-")
-                {
+                else if (oprtr == "-")
                     tempAns = num1 - num2;
-                }
-                if (oprtr == "*")
-                {
+                else if (oprtr == "*")
                     tempAns = num1 * num2;
-                }
-                if (oprtr == "/" && num2 != 0)
-                {
+                else if (oprtr == "/" && num2 != 0)
                     tempAns = num1 / num2;
-                }
+                else
+                    return "ERROR";
 
                 // empty values since they've already been used.
                 stack[1] = "";
@@ -144,6 +142,8 @@ std::string evaluateExpression(const std::string expr)
 
             continue;
         }
+
+        return "ERROR";
     }
 
     if (isNumber(stack[0]))
@@ -366,16 +366,6 @@ void Calculator::on_btnEquals_click()
 
 int main(int argc, char *argv[])
 {
-    // std::string toEvaluate;
-
-    // std::cout << "Enter a mathematical expression to evaluate: ";
-    // getline(std::cin, toEvaluate);
-    // std::cout << std::endl;
-
-    // int answer = evaluateExpression(toEvaluate);
-    // std::cout << "The answer is " << answer << std::endl;
-
     auto app = Gtk::Application::create();
-
     return app->make_window_and_run<Calculator>(argc, argv);
 }
