@@ -31,7 +31,7 @@ Alternatively, if you don't have `make` installed, run the commands written in t
 3. Compile the program with this command:
 
 ```sh
-g++ main.cc -o exe `pkg-config --cflags --libs gtkmm-4.0` -std=c++17
+g++ main.cc utils.cc gui.cc -o exe `pkg-config --cflags --libs gtkmm-4.0` -std=c++17
 ```
 
 2. Run the program with this command:
